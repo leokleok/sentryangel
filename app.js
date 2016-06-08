@@ -107,6 +107,10 @@ router.get('/', function(req, res) {
   res.render('index');
 });
 
+router.get('/admin', function(req, res) {
+  res.render('admin');
+});
+
 app.use('/', router);
 
 server.listen(port); //changed from app to server
@@ -115,7 +119,6 @@ console.log('Server started on ' + port);
 
 const io = require('socket.io')(server);
 
-console.log('Server started on ' + port);
 
 
 // app.set('views', './public')
