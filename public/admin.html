@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SentryAngel</title>
+    <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+</head>
+  </head>
+  <body>
+​
+    <div class="container">
+      <div class="row">
+         <form class="col s12">
+          <label>Sadness Metrics</label>
+            <p class="range-field">
+              <input type="range" id="sadness" min="0.01" max="1.0" step="0.01"/>
+            </p>
+          <label>Emotional Metrics</label>
+            <p class="range-field">
+              <input type="range" id="emotional" min="0.01" max="1.0" step="0.01"/>
+            </p>
+          <label>Number of Tweets</label>
+            <p class="range-field">
+              <input type="range" id="count" min="1" max="50" step="1"/>
+            </p>
+          <label>Number of Days to Analyse</label>
+            <p class="range-field">
+              <input type="range" id="days" min="1" max="60" step="1"/>
+            </p>
+          <div class="input-field col s12">
+            <input placeholder="Keyword" id="keyword" type="text" class="validate">
+            <label for="keyword">Keyword</label>
+          </div>
+          <button id='submit' class="btn waves-effect waves-light" type="submit" name="action">Submit
+          </button>
+         </form>
+       </div>
+     </div>
+    <script>
+      var myDatabase = new Firebase('https://sentryangel.firebaseio.com/settings/');
+      $("button#submit").click(function(){
+        console.log($('input#sadness').val());
+        myDatabase.set({sadness: $('input#sadness').val(), emotional: $('input#emotional').val(), tweetcount: $('input#count').val(), days: $('input#days').val(), keyword: $('input#keyword').val()});
+      });
+    </script>
+  </body>
+</html>

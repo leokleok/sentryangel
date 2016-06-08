@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SentryAngel</title>
+    <script src="//cnd.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <script type="text/javascript" src="fusioncharts/js/fusioncharts.js"></script>
+    <script type="text/javascript" src="fusioncharts/js/themes/fusioncharts.theme.fint.js"></script>
+    <script>
+          var socket = io();
+          var chartdata = [0, 0, 0, 0, 0];
+
+          socket.on('connect', function(){
+            console.log('connected');
+          })
+
+          socket.on('tweets', function(tweet) {
+            var html = '<div class="row"><div class="tweet"><img src="' + tweet.user_profile_image + '" class="circle responsive-img"/><div class="names"><span class="full-name">' + tweet.name + ' </span><span class="username">@' +tweet.screen_name + '</span></div><div class="contents"><span class="text">' + tweet.text + '</span></div></div></div><p>' + JSON.stringify(tweet.tone.document_tone.tone_categories[0].tones[4].score) + '</p>';
+
+              $('#tweet-container').prepend(html);
+          });
+
+          setTimeout(socket.on('usertweets', function(userdata) {
+            console.log('usertweets has been emitted', userdata);
+            chartdata = userdata;
+            console.log(chartdata);
+            var chart = '<div id="chart-container">'
+            $('#user-tweets').prepend(chart);
+
+          FusionCharts.ready(function () {
+               var visitChart = new FusionCharts({
+                   type: 'line',
+                   renderAt: 'chart-container',
+                   width: '750',
+                   height: '250',
+                   dataFormat: 'json',
+                   dataSource: {
+                       "chart": {
+                           "caption": " Sadness Index",
+                           "subCaption": "Past Tweets",
+                           "xAxisName": "Past Few Tweets",
+                           "yAxisName": "Sadness Metric",
+                           //Cosmetics
+                           "lineThickness" : "2",
+                           "paletteColors" : "#0075c2",
+                           "baseFontColor" : "#333333",
+                           "baseFont" : "Helvetica Neue,Arial",
+                           "captionFontSize" : "20",
+                           "subcaptionFontSize" : "20",
+                           "subcaptionFontBold" : "0",
+                           "showBorder" : "0",
+                           "bgColor" : "#ffffff",
+                           "showShadow" : "0",
+                           "canvasBgColor" : "#ffffff",
+                           "canvasBorderAlpha" : "0",
+                           "divlineAlpha" : "100",
+                           "divlineColor" : "#999999",
+                           "divlineThickness" : "1",
+                           "divLineIsDashed" : "1",
+                           "divLineDashLen" : "1",
+                           "divLineGapLen" : "1",
+                           "showXAxisLine" : "1",
+                           "xAxisLineThickness" : "1",
+                           "xAxisLineColor" : "#999999",
+                           "showAlternateHGridColor" : "0",
+                       },
+                       "data": [
+                           {
+                               "label": "Tweet 1",
+                               "value": chartdata[0]
+                           },
+                           {
+                               "label": "Tweet 2",
+                               "value": chartdata[1]
+                           },
+                           {
+                               "label": "Tweet 3",
+                               "value": chartdata[2]
+                           },
+                           {
+                               "label": "Tweet 4",
+                               "value": chartdata[3]
+                           },
+                           {
+                               "label": "Tweet 5",
+                               "value": chartdata[4]
+                           }
+                       ]
+                   }
+               });
+               visitChart.render();
+           });
+        }), 3000);
+    </script>
+  </head>
+  <body>
+
+  <style>
+    #tweet-container {
+      overflow: scroll;
+      border: solid 2px grey;
+      height: 680px;
+    }
+
+    #user-tweets {
+      overflow: scroll;
+      border: solid 2px grey;
+      height: 680px;
+    }
+
+    .paddingstyle {
+      padding: 10px;
+    }
+
+    </style>
+
+      <div class="paddingstyle"><h4><i class="fa fa-heart-o"></i>  Sentry Angel</h4></div>
+      <div id="jumbotron">
+        <div class="row">
+          <div class="col s4 valign center" id="tweet-container"></div>
+          <div class="col s8" id="user-tweets">
+            <div id="chart-container">
+          </div>
+        </div>
+
+      </div>
+
+        <script>
+           var myDatabase = new Firebase('https://sentryangel.firebaseio.com/');
+
+        </script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SentryAngel</title>
+    <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+  </head>
+  <body>
+    <div id='messagesDiv'></div>
+        <input type='text' id='nameInput' placeholder='Name'>
+        <input type='text' id='messageInput' placeholder='Message'>
+        <script>
+           var myDatabase = new Firebase('https://sentryangel.firebaseio.com/');
+
+           tone_analyzer.tone({ text: 'A word is dead when it is said, some say. Emily Dickinson' },
+           function(err, tone) {
+             if (err)
+              console.log(err);
+             else
+             console.log(JSON.stringify(tone, null, 2));
+           });
+        </script>
+  </body>
+</html>
