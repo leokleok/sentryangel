@@ -114,13 +114,19 @@
     }
 
     .paddingstyle {
-      padding: 10px;
+      padding: 8px;
+    }
+
+    #navbar {
+      display:flex;
+      justify-content: space-between;
     }
 
     </style>
-
-      <div class="paddingstyle"><h4><i class="fa fa-heart-o"></i>  Sentry Angel</h4></div>
-      <div><a class="waves-effect waves-teal btn-flat" href="/admin">Admin Control</a></div>
+      <div id='navbar' class="paddingstyle">
+      <div> <h4><i class="fa fa-heart-o"></i>  Sentry Angel</h4></div>
+      <div id="adminbtn"><h6><a class="waves-effect waves-teal btn-flat" href="/admin">Admin Control</a></h6></div>
+      </div>
       <div id="jumbotron">
         <div class="row">
           <div class="col s4 valign center" id="tweet-container"></div>
