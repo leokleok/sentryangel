@@ -59,7 +59,7 @@ myDatabase.on("value", function(snapshot) {
             if(err){
               console.log(err)
             }
-            if(userdata.length >= 11){
+            if(userdata.length >= 6){
               userdata.splice(0, 5);
             }
 

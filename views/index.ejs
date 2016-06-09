@@ -28,7 +28,6 @@
           setTimeout(socket.on('usertweets', function(userdata) {
             console.log('usertweets has been emitted', userdata);
             chartdata = userdata;
-            console.log(chartdata);
             var chart = '<div id="chart-container">'
             $('#user-tweets').prepend(chart);
 
