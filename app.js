@@ -9,8 +9,8 @@ var router = express.Router()
 var tone_analyzer = watson.tone_analyzer({
   username: process.env.IBM_WATSON_CLIENT_ID,
   password: process.env.IBM_WATSON_CLIENT_PASSWORD,
-  version: 'v3-beta',
-  version_date: '2016-02-11'
+  version: 'v3',
+  version_date: '2016-05-19'
 });
 
 var server = require('http').createServer(app)
@@ -26,36 +26,36 @@ const twitter = new Twit({
   access_token_secret: process.env.TWITTER_APP_ACCESS_TOKEN_SECRET
 });
 
-
+//firebase connection
 myDatabase.on("value", function(snapshot) {
   const keyword = snapshot.child("keyword").val()
   const sadness = snapshot.child("sadness").val()
-  console.log(sadness);
-  console.log(typeof(keyword));
+  console.log(sadness); //check keyword intensity
+  console.log(keyword); //check keyword
   var userdata = [];
-  const stream = twitter.stream('statuses/filter', { track: keyword} );
+  const stream = twitter.stream('statuses/filter', { track: keyword} ); //get keyword tweets
   io.on('connect', function(socket) {
 
     stream.on('tweet', function(tweet) {
-      var data = {};
+      var data = {}; //create object for holding tweets
       data.name = tweet.user.name;
       data.screen_name = tweet.user.screen_name;
       data.text = tweet.text;
       data.user_profile_image = tweet.user.profile_image_url;
 
-      tone_analyzer.tone({ text: tweet.text },
+      tone_analyzer.tone({ text: tweet.text }, //pass twitter text through tone analyzer
       function(err, tone) {
         if (err)
-         console.log(err);
+         console.log(err); //return error if any
         else
-          data.tone = tone;
+          data.tone = tone; //else pass returned value to data.tone
 
           if(tone.document_tone){
-        if(tone.document_tone.tone_categories[0].tones[4].score>=sadness){
-
+        if(tone.document_tone.tone_categories[0].tones[4].score>=sadness){ //if tweet is greater than set sadness
+//then execute the below
           console.log(data.screen_name + 'is flagged');
-          var options = { screen_name: tweet.user.screen_name, count: 5 };
-          twitter.get('statuses/user_timeline', options , function(err, tweet) {
+          var options = { screen_name: tweet.user.screen_name, count: 5 }; //set drill-down of last 5 tweet values
+          twitter.get('statuses/user_timeline', options , function(err, tweet) { //execute tweets with drill-down
             if(err){
               console.log(err)
             }
